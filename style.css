@@ -1,7 +1,17 @@
+/* --- PENGATURAN GLOBAL & FONT --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
+    /* Menggunakan font baru */
+    background-color: #f0f0f0;
+}
+
+/* Memastikan semua elemen menghitung padding & border dgn benar */
+* {
+    box-sizing: border-box;
 }
 
 #map {
@@ -10,10 +20,304 @@ body {
     z-index: 1;
 }
 
-.leaflet-control {
+/* --- PANEL KONTROL BARU (DI KIRI ATAS) --- */
+#control-panel {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 700;
+    width: 320px;
+    /* Lebar panel */
+    background: rgba(255, 255, 255, 0.9);
+    /* Latar belakang semi-transparan */
+    backdrop-filter: blur(8px);
+    /* Efek blur modern (jika didukung browser) */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Judul di dalam panel */
+#map-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Kontainer Search & Filter */
+#search-container,
+#filter-container {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Label untuk filter */
+#filter-container label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Styling Input & Select (Dropdown) */
+#searchInput,
+#kecamatanFilter {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Efek focus saat diklik */
+#searchInput:focus,
+#kecamatanFilter:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Styling Tombol Cari */
+#search-container {
+    display: flex;
+    /* Agar tombol & input sejajar */
+}
+
+#searchInput {
+    flex-grow: 1;
+    /* Input mengambil sisa ruang */
+    border-radius: 5px 0 0 5px;
+    /* Siku kiri bulat */
+}
+
+#search-container button {
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    /* Siku kanan bulat */
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+#search-container button:hover {
+    background: #0056b3;
+}
+
+/* --- ATRIBUSI (DI KANAN BAWAH) --- */
+#map-attribution {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    /* Dipindah ke kanan */
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 3px 8px;
+    font-size: 12px;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-right: 40px;
+}
+
+/* --- POPUP MARKER (DI PETA) --- */
+.leaflet-popup-content img.school-image {
+    width: 100%;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 3px;
+    margin-top: 5px;
+}
+
+/* Link "Lihat Selengkapnya" di popup */
+.leaflet-popup-content a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 5px;
+    background: #007bff;
+    color: white !important;
+    /* Paksa warna putih */
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.leaflet-popup-content a:hover {
+    background: #0056b3;
+}
+
+
+/* --- MODAL (POPUP DETAIL) --- */
+
+/* Latar belakang gelap */
+#modal-container {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    /* Animasi fade-in */
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Kotak konten modal */
+#modal-content {
+    background-color: #fefefe;
+    margin: 8% auto;
+    /* Lebih ke atas */
+    padding: 0;
+    /* Dihapus agar header bisa full-width */
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 650px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    /* Penting agar header tidak tumpah */
+    /* Animasi slide-down */
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        margin-top: 5%;
+        opacity: 0;
+    }
+
+    to {
+        margin-top: 8%;
+        opacity: 1;
+    }
+}
+
+/* Header Modal */
+#modal-header {
+    padding: 20px 25px;
+    background: #f7f7f7;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#modal-title {
+    margin: 0;
+    color: #333;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* Tombol tutup (X) */
+#modal-close {
+    color: #aaa;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+#modal-close:hover,
+#modal-close:focus {
+    color: #d9534f;
+    /* Warna merah saat hover */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Body Modal (Konten) */
+#modal-body {
+    padding: 25px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    max-height: 65vh;
+    /* Batas tinggi, akan scroll jika konten panjang */
+    overflow-y: auto;
+}
+
+#modal-body img {
+    width: 100%;
+    max-height: 280px;
+    /* Gambar lebih besar */
+    object-fit: cover;
+    border-radius: 8px;
+    /* Siku lebih bulat */
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+
+#modal-body table {
+    width: 100%;
+    border-collapse: collapse;
     font-size: 14px;
 }
 
-.leaflet-popup-content {
-    width: 200px;
+#modal-body table tr {
+    border-bottom: 1px solid #f0f0f0;
+    /* Garis pemisah antar baris */
+}
+
+#modal-body table tr:last-child {
+    border-bottom: none;
+    /* Hilangkan garis di baris terakhir */
+}
+
+#modal-body table td {
+    padding: 12px 5px;
+    /* Padding lebih besar */
+    vertical-align: top;
+}
+
+#modal-body table td strong {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Styling link Website di Modal */
+#modal-body table a {
+    background: #28a745;
+    /* Warna hijau */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    font-size: 13px;
+}
+
+#modal-body table a:hover {
+    background: #218838;
+}
+
+#modal-body hr {
+    border: 0;
+    border-top: 1px solid #e0e0e0;
+    margin: 20px 0;
 }
